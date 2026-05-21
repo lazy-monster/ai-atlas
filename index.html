@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Atlas of Artificial Intelligence — A Personal Study Hub</title>
+<meta name="description" content="A comprehensive, staged guide to mastering the field of AI from mathematical foundations to the frontier." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Light theme — scholarly cream */
+    --bg: #f5efe4;
+    --bg-2: #ede5d4;
+    --surface: #fbf6ec;
+    --surface-elev: #ffffff;
+    --ink: #1a1612;
+    --ink-soft: #3d3328;
+    --muted: #7a6a59;
+    --muted-2: #a4937e;
+    --accent: #8b2c1f;
+    --accent-soft: #b54a3a;
+    --accent-bg: #f3d9d2;
+    --teal: #2d5a52;
+    --gold: #a87833;
+    --green: #4a6741;
+    --border: #d9cdb8;
+    --border-soft: #e7dcc6;
+    --shadow: rgba(60, 40, 20, 0.06);
+    --shadow-2: rgba(60, 40, 20, 0.12);
+    --grain: 0.04;
+  }
+  [data-theme="dark"] {
+    --bg: #1a1612;
+    --bg-2: #221d18;
+    --surface: #221d18;
+    --surface-elev: #2a241e;
+    --ink: #f5eee2;
+    --ink-soft: #dccfba;
+    --muted: #a89580;
+    --muted-2: #7d6c5a;
+    --accent: #d4956b;
+    --accent-soft: #e0a87f;
+    --accent-bg: #3a2a1f;
+    --teal: #7ba79d;
+    --gold: #c89b5a;
+    --green: #8aa37b;
+    --border: #3a312a;
+    --border-soft: #2e2620;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-2: rgba(0, 0, 0, 0.5);
+    --grain: 0.06;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Spectral', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 17px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  /* Subtle paper grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: var(--grain);
+    pointer-events: none;
+    z-index: 1000;
+    mix-blend-mode: multiply;
+  }
+  [data-theme="dark"] body::before { mix-blend-mode: overlay; }
+
+  ::selection { background: var(--accent); color: var(--surface); }
+
+  /* Typography */
+  h1, h2, h3, h4 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 400; font-variation-settings: "SOFT" 50, "opsz" 144; }
+  h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-variation-settings: "opsz" 72; }
+  h3 { font-size: 1.35rem; font-variation-settings: "opsz" 36; }
+  h4 { font-size: 1.05rem; font-variation-settings: "opsz" 14; font-weight: 600; }
+  .display-italic { font-style: italic; font-variation-settings: "opsz" 144, "SOFT" 100; }
+
+  code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Layout */
+  .app {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .brand-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .brand-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    line-height: 1.1;
+    color: var(--ink);
+    font-variation-settings: "opsz" 36, "SOFT" 30;
+  }
+  .brand-title em { color: var(--accent); font-style: italic; font-variation-settings: "opsz" 36, "SOFT" 80; }
+
+  .overall-progress {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+  }
+  .overall-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .overall-progress-label .count { color: var(--ink); font-weight: 500; }
+  .progress-bar {
+    height: 6px;
+    background: var(--bg-2);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .stage-nav { display: flex; flex-direction: column; gap: 0.15rem; }
+  .stage-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-decoration: none;
+    color: var(--ink-soft);
+    border: 1px solid transparent;
+  }
+  .stage-nav-item:hover { background: var(--surface); }
+  .stage-nav-item.active {
+    background: var(--surface-elev);
+    border-color: var(--border);
+    color: var(--ink);
+  }
+  .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    width: 1.5rem;
+    flex-shrink: 0;
+  }
+  .stage-name {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    flex: 1;
+    line-height: 1.2;
+  }
+  .stage-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .stage-pct.complete { color: var(--green); }
+
+  .sidebar-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Spectral', serif;
+    font-size: 0.85rem;
+    transition: all 0.15s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-ghost:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+
+  /* Main content */
+  .main {
+    padding: 3rem 4rem;
+    max-width: 1100px;
+  }
+
+  .hero {
+    margin-bottom: 4rem;
+    padding: 3rem 0 4rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    margin-bottom: 1.5rem;
+    max-width: 16ch;
+  }
+  .hero h1 .accent { color: var(--accent); font-style: italic; }
+  .hero-lede {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    line-height: 1.6;
+  }
+  .hero-meta {
+    margin-top: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-soft);
+  }
+  .hero-meta-item .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .hero-meta-item .value {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    color: var(--ink);
+    font-variation-settings: "opsz" 36;
+  }
+  .hero-meta-item .value em { font-style: italic; color: var(--accent); }
+
+  /* Stage content */
+  .stage-content { display: none; animation: fadeIn 0.4s ease; }
+  .stage-content.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .stage-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .stage-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .stage-title { margin-bottom: 1rem; }
+  .stage-intro {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 65ch;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .stage-progress {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .stage-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-2);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 300px;
+  }
+  .stage-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .stage-progress-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* Sections within a stage */
+  .section {
+    margin-bottom: 3.5rem;
+  }
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dotted var(--border);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .section-title h3 { color: var(--ink); flex: 1; }
+
+  .section-note {
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  /* Resource items */
+  .items { display: flex; flex-direction: column; gap: 0.5rem; }
+  .item {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    border: 1px solid transparent;
+  }
+  .item:hover { background: var(--surface); border-color: var(--border-soft); }
+  .item.done { opacity: 0.6; }
+  .item.done .item-title { text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--muted-2); }
+
+  /* Checkbox */
+  .check {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--muted-2);
+    border-radius: 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.15s ease;
+    background: var(--surface);
+  }
+  .check:hover { border-color: var(--accent); }
+  .check.checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check.checked::after {
+    content: '';
+    position: absolute;
+    left: 5px; top: 1px;
+    width: 6px; height: 11px;
+    border: solid var(--surface);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .check.starred {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .check.starred::after {
+    content: '★';
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--surface);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  /* Resource type badges */
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    color: var(--surface);
+    width: 64px;
+    text-align: center;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  .badge-book { background: var(--accent); }
+  .badge-paper { background: var(--teal); }
+  .badge-course { background: var(--gold); }
+  .badge-video { background: #c2410c; }
+  .badge-blog { background: #6b4e2e; }
+  .badge-project { background: var(--green); }
+  .badge-checkpoint { background: #4b3b2a; border: 1px dashed currentColor; color: var(--surface); }
+
+  .item-body { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+  .item-title {
+    font-size: 0.98rem;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .item-title a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .item-title a:hover { border-color: var(--accent); color: var(--accent); }
+  .item-meta {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .item-meta .dot { margin: 0 0.4rem; opacity: 0.5; }
+  .item-actions { display: flex; gap: 0.5rem; opacity: 0; transition: opacity 0.15s ease; }
+  .item:hover .item-actions { opacity: 1; }
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .icon-btn:hover { background: var(--accent); color: var(--surface); border-color: var(--accent); }
+
+  .checkpoint-block {
+    margin: 1.5rem 0;
+    padding: 1.25rem 1.5rem;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+  }
+  .checkpoint-block .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .checkpoint-block .text {
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* Embedded videos */
+  .video-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+  .video-caption {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* Pull quote / mantra */
+  .pull-quote {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+  }
+  .pull-quote::before {
+    content: '"';
+    font-family: 'Fraunces', serif;
+    font-size: 5rem;
+    color: var(--accent);
+    position: absolute;
+    top: -1rem; left: 1rem;
+    line-height: 1;
+    opacity: 0.3;
+  }
+  .pull-quote p {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+    font-variation-settings: "opsz" 72, "SOFT" 80;
+  }
+  .pull-quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Welcome / how-to-use card */
+  .how-to {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 3rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .how-to-block h4 {
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+  .how-to-block p { color: var(--ink-soft); line-height: 1.6; font-size: 0.95rem; }
+  .how-to-block ul { padding-left: 1rem; color: var(--ink-soft); line-height: 1.8; font-size: 0.95rem; }
+
+  /* Final checkpoint section */
+  .final-section {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, var(--accent-bg), var(--surface));
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+  }
+  .final-section h3 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar {
+      position: relative;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .main { padding: 2rem 1.5rem; }
+    .hero-meta { grid-template-columns: 1fr; gap: 1.5rem; }
+    .how-to { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    .main { padding: 1.5rem 1rem; }
+    .item { grid-template-columns: auto 1fr; }
+    .item .badge { display: none; }
+    .item-actions { opacity: 1; }
+  }
+
+  /* Print styles */
+  @media print {
+    .sidebar, .item-actions, .icon-btn, .btn-ghost { display: none !important; }
+    .app { grid-template-columns: 1fr; }
+    .stage-content { display: block !important; page-break-before: always; }
+    body { background: white; color: black; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">A Personal Atlas</span>
+      <span class="brand-title">Mastering <em>Artificial Intelligence</em></span>
+    </div>
+
+    <div class="overall-progress">
+      <div class="overall-progress-label">
+        <span>Total progress</span>
+        <span class="count"><span id="totalDone">0</span>/<span id="totalAll">0</span></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="overallFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <nav class="stage-nav" id="stageNav"></nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-ghost" id="themeToggle">◐ Toggle theme</button>
+      <button class="btn-ghost" id="exportBtn">↓ Export progress</button>
+      <button class="btn-ghost" id="importBtn">↑ Import progress</button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+      <button class="btn-ghost" id="resetBtn">⟲ Reset progress</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero-eyebrow">A staged roadmap • 15 stages</div>
+      <h1>The <span class="accent">Atlas</span> of <br>Artificial Intelligence</h1>
+      <p class="hero-lede">
+        A comprehensive, verified, staged guide from mathematical foundations to the
+        contemporary frontier — built as a single hub for serious self-study.
+        Click any check to mark progress. Click twice to star a topic you could now teach.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="label">Scope</div>
+          <div class="value">15 <em>stages</em></div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Pace</div>
+          <div class="value">12–48 <em>months</em></div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="label">Honest aim</div>
+          <div class="value">Top <em>0.1%</em></div>
+        </div>
+      </div>
+
+      <div class="how-to">
+        <div class="how-to-block">
+          <h4>How to use this hub</h4>
+          <ul>
+            <li>Click a stage in the sidebar to navigate</li>
+            <li>Single-click a checkbox to mark complete</li>
+            <li>Double-click to mark <strong>★ mastered</strong> — you could teach it</li>
+            <li>Click the link icon (↗) to open a resource</li>
+            <li>Progress saves automatically in your browser</li>
+            <li>Export your progress as JSON for backup</li>
+          </ul>
+        </div>
+        <div class="how-to-block">
+          <h4>A reality check</h4>
+          <p>
+            No single human knows all of AI deeply — even Hinton, Sutskever, or Russell
+            would tell you they specialize. But if you finish this guide and internalize
+            it, you will be in rare company. The honest target is a working mastery
+            broader than nearly anyone you'll ever meet.
+          </p>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <p>What I cannot create, I do not understand.</p>
+        <cite>— Richard Feynman, on his blackboard at the time of his death</cite>
+      </div>
+    </section>
+
+    <div id="stageContainer"></div>
+
+    <footer class="footer">
+      <span>Built for personal study • All progress stored locally in your browser</span>
+      <span>v1.0 • Spectral · Fraunces · JetBrains Mono</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+// =============================================================================
+// DATA: Every stage, section, and resource
+// =============================================================================
+const STAGES = [
+  {
+    id: 0,
+    title: "Mathematical & Programming Prerequisites",
+    intro: "You cannot understand modern AI without this. Skipping the foundations is the single most common reason people plateau.",
+    sections: [
+      {
+        title: "Linear Algebra",
+        items: [
+          { type: "book", title: "Introduction to Linear Algebra", meta: "Gilbert Strang · 5th ed.", url: "https://math.mit.edu/~gs/linearalgebra/" },
+          { type: "course", title: "MIT 18.06 — Linear Algebra (full lecture series)", meta: "Gilbert Strang · MIT OCW", url: "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/" },
+          { type: "book", title: "Linear Algebra Done Right", meta: "Sheldon Axler · for proof-based depth", url: "https://linear.axler.net/" },
+          { type: "video", title: "Essence of Linear Algebra", meta: "3Blue1Brown · intuition layer (~3.5 hrs)", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" }
+        ],
+        checkpoint: "You can explain eigendecomposition, SVD, and why they matter for PCA without notes."
+      },
+      {
+        title: "Calculus & Multivariable Calculus",
+        items: [
+          { type: "course", title: "MIT 18.01 Single Variable Calculus", meta: "MIT OCW", url: "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/" },
+          { type: "course", title: "MIT 18.02 Multivariable Calculus", meta: "MIT OCW", url: "https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/" },
+          { type: "video", title: "Essence of Calculus", meta: "3Blue1Brown · 12-part series", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr" }
+        ],
+        checkpoint: "You can derive the gradient of a multivariable function and explain the chain rule's role in backpropagation."
+      },
+      {
+        title: "Probability & Statistics",
+        items: [
+          { type: "book", title: "Introduction to Probability", meta: "Blitzstein & Hwang", url: "https://projects.iq.harvard.edu/stat110/home" },
+          { type: "course", title: "Harvard Stat 110", meta: "Joe Blitzstein · full lectures on YouTube", url: "https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo" },
+          { type: "book", title: "All of Statistics", meta: "Larry Wasserman", url: "https://link.springer.com/book/10.1007/978-0-387-21736-9" },
+          { type: "book", title: "Probability Theory: The Logic of Science", meta: "E. T. Jaynes · Bayesian worldview", url: "https://bayes.wustl.edu/etj/prob/book.pdf" }
+        ],
+        checkpoint: "Bayes' rule, conditional independence, MLE vs MAP, CLT — all explained from memory."
+      },
+      {
+        title: "Information Theory",
+        items: [
+          { type: "book", title: "Elements of Information Theory", meta: "Cover & Thomas · Ch. 1–8 essential" },
+          { type: "book", title: "Information Theory, Inference, and Learning Algorithms", meta: "David MacKay · free PDF", url: "http://www.inference.org.uk/itila/book.html" }
+        ],
+        checkpoint: "You understand entropy, cross-entropy, KL divergence, mutual information — and why cross-entropy is the loss for classification."
+      },
+      {
+        title: "Optimization",
+        items: [
+          { type: "book", title: "Convex Optimization", meta: "Boyd & Vandenberghe · free PDF", url: "https://web.stanford.edu/~boyd/cvxbook/" },
+          { type: "course", title: "Stanford EE364A — Convex Optimization", meta: "Stephen Boyd · video lectures", url: "https://web.stanford.edu/class/ee364a/" },
+          { type: "paper", title: "Adam: A Method for Stochastic Optimization", meta: "Kingma & Ba · 2014", url: "https://arxiv.org/abs/1412.6980" }
+        ],
+        checkpoint: "Convexity, gradient descent variants, momentum, Adam — all derivable on a whiteboard."
+      },
+      {
+        title: "Programming Foundations",
+        items: [
+          { type: "book", title: "Fluent Python", meta: "Luciano Ramalho · 2nd ed." },
+          { type: "book", title: "Introduction to Algorithms (CLRS)", meta: "Cormen, Leiserson, Rivest, Stein" },
+          { type: "course", title: "MIT 6.006 — Introduction to Algorithms", meta: "MIT OCW", url: "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/" },
+          { type: "project", title: "Implement linear & logistic regression, k-means, and a 2-layer NN from scratch in NumPy", meta: "no frameworks — just NumPy and your understanding" }
+        ],
+        checkpoint: "You can implement gradient descent from scratch and vectorize a forward+backward pass without a framework."
+      }
+    ]
+  },
+  {
+    id: 1,
+    title: "History & Philosophy of AI",
+    intro: "Before learning what works, learn how the field got here. This prevents you from reinventing failed paradigms and gives context for why current methods exist.",
+    sections: [
+      {
+        title: "Origins — before 1956",
+        items: [
+          { type: "paper", title: "Computing Machinery and Intelligence", meta: "Alan Turing · 1950", url: "https://www.csee.umbc.edu/courses/471/papers/turing.pdf" },
+          { type: "paper", title: "A Logical Calculus of the Ideas Immanent in Nervous Activity", meta: "McCulloch & Pitts · 1943" },
+          { type: "paper", title: "A Mathematical Theory of Communication", meta: "Claude Shannon · 1948", url: "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf" },
+          { type: "book", title: "Cybernetics", meta: "Norbert Wiener · 1948" }
+        ]
+      },
+      {
+        title: "The Founding Era (1956–1974)",
+        items: [
+          { type: "paper", title: "The Perceptron — Frank Rosenblatt", meta: "1958 — foundational neural model" },
+          { type: "book", title: "Perceptrons", meta: "Minsky & Papert · 1969 · the book that triggered the first AI winter" },
+          { type: "blog", title: "Read about: ELIZA (1966), SHRDLU (1972), and the Dartmouth Conference (1956)", meta: "essential historical context" }
+        ]
+      },
+      {
+        title: "First AI Winter & Expert Systems (1974–1987)",
+        items: [
+          { type: "blog", title: "The Lighthill Report (1973) — read about its impact", meta: "the report that triggered the first AI winter in the UK" },
+          { type: "blog", title: "Expert systems — MYCIN, DENDRAL, XCON", meta: "understand what worked and why it didn't scale" }
+        ]
+      },
+      {
+        title: "Connectionism Revival (1980s)",
+        items: [
+          { type: "paper", title: "Learning representations by back-propagating errors", meta: "Rumelhart, Hinton, Williams · 1986", url: "https://www.nature.com/articles/323533a0" },
+          { type: "book", title: "Parallel Distributed Processing", meta: "Rumelhart & McClelland · 1986" },
+          { type: "paper", title: "Neural networks and physical systems with emergent collective computational abilities", meta: "Hopfield · 1982" }
+        ]
+      },
+      {
+        title: "Comprehensive Historical Treatments",
+        items: [
+          { type: "book", title: "The Quest for Artificial Intelligence", meta: "Nils Nilsson · 2009 · free PDF", url: "https://ai.stanford.edu/~nilsson/QAI/qai.pdf" },
+          { type: "book", title: "Machines Who Think", meta: "Pamela McCorduck · 2004 ed." },
+          { type: "book", title: "Artificial Intelligence: A Modern Approach (AIMA), Ch. 1", meta: "Russell & Norvig · 4th ed.", url: "http://aima.cs.berkeley.edu/" }
+        ]
+      },
+      {
+        title: "Philosophical Foundations",
+        items: [
+          { type: "paper", title: "Minds, Brains, and Programs (the Chinese Room)", meta: "John Searle · 1980" },
+          { type: "book", title: "What Computers Can't Do", meta: "Hubert Dreyfus · 1972 — understand the classic critique" },
+          { type: "book", title: "Gödel, Escher, Bach: An Eternal Golden Braid", meta: "Douglas Hofstadter · 1979" },
+          { type: "book", title: "Consciousness Explained", meta: "Daniel Dennett · 1991" }
+        ],
+        checkpoint: "You can narrate the arc — Turing → Dartmouth → Perceptrons → First Winter → Expert Systems → Second Winter → Connectionism → Deep Learning — naming key people, papers, and ideas at every transition."
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: "Classical / Symbolic AI",
+    intro: "Most modern practitioners skip this. Don't. It's the foundation that neurosymbolic AI keeps returning to — and AIMA covers it definitively.",
+    sections: [
+      {
+        title: "The Canonical Text",
+        items: [
+          { type: "book", title: "Artificial Intelligence: A Modern Approach (4th ed.)", meta: "Russell & Norvig · Parts I–V", url: "http://aima.cs.berkeley.edu/" }
+        ]
+      },
+      {
+        title: "Search Algorithms",
+        items: [
+          { type: "blog", title: "AIMA Ch. 3–5: uninformed search, informed search, adversarial search", meta: "read carefully" },
+          { type: "project", title: "Implement BFS, DFS, A*, Minimax, Alpha-Beta pruning, MCTS", meta: "all from scratch in Python" },
+          { type: "paper", title: "Mastering the game of Go with deep neural networks and tree search (AlphaGo)", meta: "Silver et al. · 2016", url: "https://www.nature.com/articles/nature16961" }
+        ]
+      },
+      {
+        title: "Knowledge Representation & Logic",
+        items: [
+          { type: "blog", title: "AIMA Ch. 7–9: propositional logic, first-order logic, inference", meta: "core symbolic AI" },
+          { type: "blog", title: "AIMA Ch. 10–12: planning, knowledge representation", meta: "" },
+          { type: "project", title: "Small project in Prolog", meta: "to feel the symbolic paradigm" }
+        ]
+      },
+      {
+        title: "Probabilistic Reasoning",
+        items: [
+          { type: "blog", title: "AIMA Ch. 13–17: probability, Bayesian networks, HMMs", meta: "" },
+          { type: "book", title: "Probabilistic Graphical Models", meta: "Koller & Friedman · Ch. 1–5 minimum" },
+          { type: "course", title: "Stanford CS228 — Probabilistic Graphical Models", meta: "Daphne Koller", url: "https://ermongroup.github.io/cs228-notes/" }
+        ],
+        checkpoint: "Implement A* and a Bayesian network with exact inference from scratch. Explain when symbolic methods are still preferred over neural ones."
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: "Classical Machine Learning",
+    intro: "The pre-deep-learning ML canon. Skip it and you'll constantly reinvent it badly — and you'll miss the strong baselines that often beat neural networks on tabular data.",
+    sections: [
+      {
+        title: "The Canonical Texts",
+        items: [
+          { type: "book", title: "Pattern Recognition and Machine Learning (PRML)", meta: "Christopher Bishop · 2006 · the gold standard", url: "https://www.microsoft.com/en-us/research/people/cmbishop/" },
+          { type: "book", title: "The Elements of Statistical Learning (ESL)", meta: "Hastie, Tibshirani, Friedman · free PDF", url: "https://hastie.su.domains/ElemStatLearn/" },
+          { type: "book", title: "An Introduction to Statistical Learning (ISLR)", meta: "the friendlier companion to ESL · free PDF", url: "https://www.statlearning.com/" },
+          { type: "book", title: "Probabilistic Machine Learning", meta: "Kevin Murphy · 2022 · free PDF", url: "https://probml.github.io/pml-book/" }
+        ]
+      },
+      {
+        title: "Foundational Courses",
+        items: [
+          { type: "course", title: "Stanford CS229 — Machine Learning (original)", meta: "Andrew Ng · full lectures", url: "https://cs229.stanford.edu/" },
+          { type: "course", title: "Caltech CS156 — Learning From Data", meta: "Yaser Abu-Mostafa", url: "https://work.caltech.edu/telecourse" }
+        ]
+      },
+      {
+        title: "Supervised Learning — key papers",
+        items: [
+          { type: "paper", title: "Support-Vector Networks", meta: "Cortes & Vapnik · 1995" },
+          { type: "paper", title: "Random Forests", meta: "Leo Breiman · 2001" },
+          { type: "paper", title: "Greedy Function Approximation: A Gradient Boosting Machine", meta: "Jerome Friedman · 2001" },
+          { type: "paper", title: "XGBoost: A Scalable Tree Boosting System", meta: "Chen & Guestrin · 2016", url: "https://arxiv.org/abs/1603.02754" }
+        ]
+      },
+      {
+        title: "Unsupervised Learning",
+        items: [
+          { type: "blog", title: "k-means, hierarchical clustering, DBSCAN, GMMs, EM algorithm", meta: "study from PRML Ch. 9" },
+          { type: "blog", title: "PCA, ICA, t-SNE, UMAP", meta: "" },
+          { type: "paper", title: "Visualizing Data using t-SNE", meta: "van der Maaten & Hinton · 2008", url: "https://lvdmaaten.github.io/tsne/" }
+        ]
+      },
+      {
+        title: "Theory & Foundations",
+        items: [
+          { type: "blog", title: "VC dimension, PAC learning, bias-variance tradeoff", meta: "from ESL Ch. 2 and Mohri" },
+          { type: "book", title: "Foundations of Machine Learning", meta: "Mohri, Rostamizadeh, Talwalkar", url: "https://cs.nyu.edu/~mohri/mlbook/" },
+          { type: "book", title: "Understanding Machine Learning: From Theory to Algorithms", meta: "Shalev-Shwartz & Ben-David · free PDF", url: "https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/" }
+        ]
+      },
+      {
+        title: "Practical",
+        items: [
+          { type: "book", title: "Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow", meta: "Géron · 3rd ed. · Part I" },
+          { type: "project", title: "Win a beginner Kaggle competition with gradient boosting + feature engineering", meta: "before doing any deep learning" }
+        ],
+        checkpoint: "Given a tabular dataset, you can build a strong baseline (gradient boosting + careful feature engineering) that beats most novice deep learning attempts."
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: "Deep Learning Foundations",
+    intro: "Now the modern era begins. Build everything from scratch at least once — depth of understanding comes from your fingers, not your eyes.",
+    sections: [
+      {
+        title: "The Canonical Texts",
+        items: [
+          { type: "book", title: "Deep Learning", meta: "Goodfellow, Bengio, Courville · 2016 · free online", url: "https://www.deeplearningbook.org/" },
+          { type: "book", title: "Neural Networks and Deep Learning", meta: "Michael Nielsen · free online · best intuition primer", url: "http://neuralnetworksanddeeplearning.com/" },
+          { type: "book", title: "Understanding Deep Learning", meta: "Simon Prince · 2023 · free PDF", url: "https://udlbook.github.io/udlbook/" },
+          { type: "book", title: "Dive into Deep Learning (D2L)", meta: "Zhang et al. · interactive, free", url: "https://d2l.ai/" }
+        ]
+      },
+      {
+        title: "Courses",
+        items: [
+          { type: "course", title: "Stanford CS231n — CNNs for Visual Recognition", meta: "Karpathy/Johnson era lectures + assignments", url: "http://cs231n.stanford.edu/" },
+          { type: "course", title: "Stanford CS224n — NLP with Deep Learning", meta: "Christopher Manning", url: "https://web.stanford.edu/class/cs224n/" },
+          { type: "course", title: "Practical Deep Learning for Coders", meta: "fast.ai · Jeremy Howard", url: "https://course.fast.ai/" }
+        ]
+      },
+      {
+        title: "Karpathy's Neural Networks: Zero to Hero",
+        items: [
+          { type: "video", title: "The entire Zero to Hero playlist", meta: "Andrej Karpathy · this is THE highest-leverage resource on this entire roadmap", url: "https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ" }
+        ],
+        embedVideo: { id: "VMj-3S1tku0", caption: "Karpathy — The spelled-out intro to neural networks and backpropagation: building micrograd" }
+      },
+      {
+        title: "Historical Papers (read in order)",
+        items: [
+          { type: "paper", title: "LeNet — Gradient-Based Learning Applied to Document Recognition", meta: "LeCun et al. · 1998" },
+          { type: "paper", title: "Long Short-Term Memory", meta: "Hochreiter & Schmidhuber · 1997" },
+          { type: "paper", title: "A Neural Probabilistic Language Model", meta: "Bengio et al. · 2003" },
+          { type: "paper", title: "Understanding the difficulty of training deep feedforward neural networks (Xavier init)", meta: "Glorot & Bengio · 2010", url: "https://proceedings.mlr.press/v9/glorot10a.html" },
+          { type: "paper", title: "AlexNet — ImageNet Classification with Deep CNNs", meta: "Krizhevsky, Sutskever, Hinton · 2012 · the spark of the modern era", url: "https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html" },
+          { type: "paper", title: "VGG — Very Deep CNNs for Large-Scale Image Recognition", meta: "Simonyan & Zisserman · 2014", url: "https://arxiv.org/abs/1409.1556" },
+          { type: "paper", title: "GoogLeNet / Inception", meta: "Szegedy et al. · 2014", url: "https://arxiv.org/abs/1409.4842" },
+          { type: "paper", title: "Deep Residual Learning for Image Recognition (ResNet)", meta: "He et al. · 2015", url: "https://arxiv.org/abs/1512.03385" },
+          { type: "paper", title: "Delving Deep into Rectifiers (Kaiming init)", meta: "He et al. · 2015", url: "https://arxiv.org/abs/1502.01852" },
+          { type: "paper", title: "Batch Normalization", meta: "Ioffe & Szegedy · 2015", url: "https://arxiv.org/abs/1502.03167" },
+          { type: "paper", title: "Dropout: A Simple Way to Prevent Neural Networks from Overfitting", meta: "Srivastava et al. · 2014" }
+        ]
+      },
+      {
+        title: "Sequence Models",
+        items: [
+          { type: "paper", title: "word2vec — Efficient Estimation of Word Representations", meta: "Mikolov et al. · 2013", url: "https://arxiv.org/abs/1301.3781" },
+          { type: "paper", title: "GloVe — Global Vectors for Word Representation", meta: "Pennington, Socher, Manning · 2014", url: "https://nlp.stanford.edu/projects/glove/" },
+          { type: "paper", title: "Sequence to Sequence Learning with Neural Networks", meta: "Sutskever, Vinyals, Le · 2014", url: "https://arxiv.org/abs/1409.3215" },
+          { type: "paper", title: "Neural Machine Translation by Jointly Learning to Align and Translate (attention)", meta: "Bahdanau, Cho, Bengio · 2015", url: "https://arxiv.org/abs/1409.0473" }
+        ]
+      },
+      {
+        title: "Generative Foundations",
+        items: [
+          { type: "paper", title: "Auto-Encoding Variational Bayes (VAE)", meta: "Kingma & Welling · 2013", url: "https://arxiv.org/abs/1312.6114" },
+          { type: "paper", title: "Generative Adversarial Networks", meta: "Goodfellow et al. · 2014", url: "https://arxiv.org/abs/1406.2661" },
+          { type: "paper", title: "DCGAN — Unsupervised Representation Learning with Deep Convolutional GANs", meta: "Radford et al. · 2015", url: "https://arxiv.org/abs/1511.06434" }
+        ]
+      },
+      {
+        title: "Frameworks & Implementation",
+        items: [
+          { type: "course", title: "PyTorch official tutorials — work through front to back", meta: "the modern lingua franca", url: "https://pytorch.org/tutorials/" },
+          { type: "book", title: "Deep Learning with PyTorch", meta: "Stevens, Antiga, Viehmann", url: "https://www.manning.com/books/deep-learning-with-pytorch" },
+          { type: "project", title: "Implement a 2-layer NN with backprop in pure NumPy", meta: "no PyTorch — derive every gradient yourself" },
+          { type: "project", title: "Reproduce LeNet/AlexNet in PyTorch on a small dataset", meta: "to feel the parameter counts and training dynamics" }
+        ],
+        checkpoint: "You can implement backpropagation by hand on paper. You can write a forward + backward pass in NumPy without notes."
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: "The Transformer Era",
+    intro: "The single most important architecture of the last decade. Master it completely — every detail of the original paper, then every modern modification.",
+    sections: [
+      {
+        title: "The Foundational Papers",
+        items: [
+          { type: "paper", title: "Attention Is All You Need", meta: "Vaswani et al. · 2017 · read 5+ times until every detail is internalized", url: "https://arxiv.org/abs/1706.03762" },
+          { type: "paper", title: "BERT: Pre-training of Deep Bidirectional Transformers", meta: "Devlin et al. · 2018", url: "https://arxiv.org/abs/1810.04805" },
+          { type: "paper", title: "GPT-1 — Improving Language Understanding by Generative Pre-Training", meta: "Radford et al. · 2018", url: "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf" },
+          { type: "paper", title: "GPT-2 — Language Models are Unsupervised Multitask Learners", meta: "Radford et al. · 2019", url: "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" },
+          { type: "paper", title: "GPT-3 — Language Models are Few-Shot Learners", meta: "Brown et al. · 2020", url: "https://arxiv.org/abs/2005.14165" },
+          { type: "paper", title: "T5 — Exploring the Limits of Transfer Learning", meta: "Raffel et al. · 2019", url: "https://arxiv.org/abs/1910.10683" },
+          { type: "paper", title: "RoBERTa", meta: "Liu et al. · 2019", url: "https://arxiv.org/abs/1907.11692" },
+          { type: "paper", title: "BART — Denoising Sequence-to-Sequence Pre-training", meta: "Lewis et al. · 2019", url: "https://arxiv.org/abs/1910.13461" },
+          { type: "paper", title: "XLNet — Generalized Autoregressive Pretraining", meta: "Yang et al. · 2019", url: "https://arxiv.org/abs/1906.08237" }
+        ]
+      },
+      {
+        title: "Illustrated Companions",
+        items: [
+          { type: "blog", title: "The Illustrated Transformer", meta: "Jay Alammar · essential supplement", url: "https://jalammar.github.io/illustrated-transformer/" },
+          { type: "blog", title: "The Illustrated GPT-2", meta: "Jay Alammar", url: "https://jalammar.github.io/illustrated-gpt2/" },
+          { type: "blog", title: "The Illustrated BERT, ELMo, and co.", meta: "Jay Alammar", url: "https://jalammar.github.io/illustrated-bert/" },
+          { type: "blog", title: "The Annotated Transformer", meta: "Harvard NLP · line-by-line implementation", url: "http://nlp.seas.harvard.edu/annotated-transformer/" }
+        ],
+        embedVideo: { id: "kCc8FmEb1nY", caption: "Karpathy — Let's build GPT: from scratch, in code, spelled out (2hr)" }
+      },
+      {
+        title: "Modern Architectural Variants",
+        items: [
+          { type: "paper", title: "FlashAttention", meta: "Dao et al. · 2022 · IO-aware attention", url: "https://arxiv.org/abs/2205.14135" },
+          { type: "paper", title: "FlashAttention-2", meta: "Tri Dao · 2023", url: "https://arxiv.org/abs/2307.08691" },
+          { type: "paper", title: "Multi-Query Attention", meta: "Noam Shazeer · 2019", url: "https://arxiv.org/abs/1911.02150" },
+          { type: "paper", title: "GQA — Grouped-Query Attention", meta: "Ainslie et al. · 2023", url: "https://arxiv.org/abs/2305.13245" },
+          { type: "paper", title: "RoPE — Rotary Position Embedding", meta: "Su et al. · 2021", url: "https://arxiv.org/abs/2104.09864" },
+          { type: "paper", title: "ALiBi — Train Short, Test Long", meta: "Press, Smith, Lewis · 2021", url: "https://arxiv.org/abs/2108.12409" },
+          { type: "paper", title: "GLU Variants Improve Transformer (SwiGLU)", meta: "Noam Shazeer · 2020", url: "https://arxiv.org/abs/2002.05202" },
+          { type: "paper", title: "RMSNorm — Root Mean Square Layer Normalization", meta: "Zhang & Sennrich · 2019", url: "https://arxiv.org/abs/1910.07467" }
+        ]
+      },
+      {
+        title: "Vision Transformers & Multimodal",
+        items: [
+          { type: "paper", title: "ViT — An Image is Worth 16x16 Words", meta: "Dosovitskiy et al. · 2020", url: "https://arxiv.org/abs/2010.11929" },
+          { type: "paper", title: "CLIP — Learning Transferable Visual Models From Natural Language Supervision", meta: "Radford et al. · 2021", url: "https://arxiv.org/abs/2103.00020" },
+          { type: "paper", title: "Swin Transformer — Hierarchical Vision Transformer", meta: "Liu et al. · 2021", url: "https://arxiv.org/abs/2103.14030" },
+          { type: "paper", title: "Masked Autoencoders Are Scalable Vision Learners (MAE)", meta: "He et al. · 2021", url: "https://arxiv.org/abs/2111.06377" }
+        ]
+      },
+      {
+        title: "Implementation Practice",
+        items: [
+          { type: "project", title: "Build a Transformer block from scratch in PyTorch — no copying", meta: "the single most important coding exercise on this roadmap" },
+          { type: "project", title: "Reproduce nanoGPT-style GPT-2 training on tinyShakespeare", meta: "Karpathy's nanoGPT as reference AFTER your own attempt", url: "https://github.com/karpathy/nanoGPT" },
+          { type: "project", title: "Implement RoPE, GQA, SwiGLU, RMSNorm — the modern LLaMA stack", meta: "explain why each replaced the original Transformer's choice" }
+        ],
+        checkpoint: "You can explain — without notes — the full Transformer forward and backward pass, the role of LayerNorm placement (pre-norm vs post-norm), and why modern LLMs use RoPE + GQA + SwiGLU + RMSNorm."
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: "Large Language Models",
+    intro: "The current center of the field. This is the largest stage by volume — and where the frontier of research is happening today.",
+    sections: [
+      {
+        title: "Scaling Laws & Foundations",
+        items: [
+          { type: "paper", title: "Scaling Laws for Neural Language Models", meta: "Kaplan et al. · 2020 · OpenAI", url: "https://arxiv.org/abs/2001.08361" },
+          { type: "paper", title: "Chinchilla — Training Compute-Optimal Large Language Models", meta: "Hoffmann et al. · 2022", url: "https://arxiv.org/abs/2203.15556" },
+          { type: "paper", title: "Emergent Abilities of Large Language Models", meta: "Wei et al. · 2022", url: "https://arxiv.org/abs/2206.07682" },
+          { type: "paper", title: "Are Emergent Abilities of LLMs a Mirage?", meta: "Schaeffer et al. · 2023 · the counterargument", url: "https://arxiv.org/abs/2304.15004" }
+        ]
+      },
+      {
+        title: "Major Open Model Papers",
+        items: [
+          { type: "paper", title: "LLaMA: Open and Efficient Foundation Language Models", meta: "Touvron et al. · 2023", url: "https://arxiv.org/abs/2302.13971" },
+          { type: "paper", title: "LLaMA 2: Open Foundation and Fine-Tuned Chat Models", meta: "Touvron et al. · 2023", url: "https://arxiv.org/abs/2307.09288" },
+          { type: "paper", title: "The Llama 3 Herd of Models", meta: "Meta · 2024", url: "https://arxiv.org/abs/2407.21783" },
+          { type: "paper", title: "Mistral 7B", meta: "Jiang et al. · 2023", url: "https://arxiv.org/abs/2310.06825" },
+          { type: "paper", title: "Mixtral of Experts", meta: "Jiang et al. · 2024", url: "https://arxiv.org/abs/2401.04088" },
+          { type: "paper", title: "PaLM — Scaling Language Modeling with Pathways", meta: "Chowdhery et al. · 2022", url: "https://arxiv.org/abs/2204.02311" },
+          { type: "paper", title: "DeepSeek-V3 Technical Report", meta: "DeepSeek-AI · 2024", url: "https://arxiv.org/abs/2412.19437" },
+          { type: "paper", title: "Qwen2 Technical Report", meta: "Alibaba · 2024", url: "https://arxiv.org/abs/2407.10671" }
+        ]
+      },
+      {
+        title: "Frontier Lab Reports",
+        items: [
+          { type: "paper", title: "GPT-4 Technical Report", meta: "OpenAI · 2023", url: "https://arxiv.org/abs/2303.08774" },
+          { type: "paper", title: "Claude model cards & system cards", meta: "Anthropic", url: "https://www.anthropic.com/news" },
+          { type: "paper", title: "Gemini Technical Report", meta: "Google DeepMind", url: "https://arxiv.org/abs/2312.11805" },
+          { type: "paper", title: "Gemini 1.5: Unlocking multimodal understanding across millions of tokens", meta: "Google · 2024", url: "https://arxiv.org/abs/2403.05530" }
+        ]
+      },
+      {
+        title: "Instruction Tuning & RLHF",
+        items: [
+          { type: "paper", title: "Deep Reinforcement Learning from Human Preferences", meta: "Christiano et al. · 2017 · the seed", url: "https://arxiv.org/abs/1706.03741" },
+          { type: "paper", title: "Fine-Tuning Language Models from Human Preferences", meta: "Ziegler et al. · 2019", url: "https://arxiv.org/abs/1909.08593" },
+          { type: "paper", title: "Learning to summarize from human feedback", meta: "Stiennon et al. · 2020", url: "https://arxiv.org/abs/2009.01325" },
+          { type: "paper", title: "InstructGPT — Training language models to follow instructions with human feedback", meta: "Ouyang et al. · 2022", url: "https://arxiv.org/abs/2203.02155" },
+          { type: "paper", title: "Constitutional AI: Harmlessness from AI Feedback", meta: "Bai et al. · 2022 · Anthropic", url: "https://arxiv.org/abs/2212.08073" },
+          { type: "paper", title: "DPO — Direct Preference Optimization", meta: "Rafailov et al. · 2023", url: "https://arxiv.org/abs/2305.18290" },
+          { type: "paper", title: "KTO — Model Alignment as Prospect Theoretic Optimization", meta: "Ethayarajh et al. · 2024", url: "https://arxiv.org/abs/2402.01306" }
+        ]
+      },
+      {
+        title: "Reasoning & Chain-of-Thought",
+        items: [
+          { type: "paper", title: "Chain-of-Thought Prompting Elicits Reasoning in LLMs", meta: "Wei et al. · 2022", url: "https://arxiv.org/abs/2201.11903" },
+          { type: "paper", title: "Large Language Models are Zero-Shot Reasoners", meta: "Kojima et al. · 2022", url: "https://arxiv.org/abs/2205.11916" },
+          { type: "paper", title: "Self-Consistency Improves Chain of Thought", meta: "Wang et al. · 2022", url: "https://arxiv.org/abs/2203.11171" },
+          { type: "paper", title: "Tree of Thoughts: Deliberate Problem Solving with LLMs", meta: "Yao et al. · 2023", url: "https://arxiv.org/abs/2305.10601" },
+          { type: "paper", title: "ReAct — Synergizing Reasoning and Acting in Language Models", meta: "Yao et al. · 2022", url: "https://arxiv.org/abs/2210.03629" },
+          { type: "paper", title: "DeepSeek-R1 — Incentivizing Reasoning Capability in LLMs via RL", meta: "DeepSeek-AI · 2025", url: "https://arxiv.org/abs/2501.12948" },
+          { type: "paper", title: "Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters", meta: "Snell et al. · 2024", url: "https://arxiv.org/abs/2408.03314" }
+        ]
+      },
+      {
+        title: "Retrieval, Tools, Agents",
+        items: [
+          { type: "paper", title: "RAG — Retrieval-Augmented Generation", meta: "Lewis et al. · 2020", url: "https://arxiv.org/abs/2005.11401" },
+          { type: "paper", title: "Dense Passage Retrieval", meta: "Karpukhin et al. · 2020", url: "https://arxiv.org/abs/2004.04906" },
+          { type: "paper", title: "Toolformer — Language Models Can Teach Themselves to Use Tools", meta: "Schick et al. · 2023", url: "https://arxiv.org/abs/2302.04761" },
+          { type: "paper", title: "Reflexion — Language Agents with Verbal Reinforcement Learning", meta: "Shinn et al. · 2023", url: "https://arxiv.org/abs/2303.11366" },
+          { type: "paper", title: "Generative Agents — Interactive Simulacra of Human Behavior", meta: "Park et al. · 2023", url: "https://arxiv.org/abs/2304.03442" }
+        ]
+      },
+      {
+        title: "Efficient Training & Inference",
+        items: [
+          { type: "paper", title: "LoRA — Low-Rank Adaptation of Large Language Models", meta: "Hu et al. · 2021", url: "https://arxiv.org/abs/2106.09685" },
+          { type: "paper", title: "QLoRA — Efficient Finetuning of Quantized LLMs", meta: "Dettmers et al. · 2023", url: "https://arxiv.org/abs/2305.14314" },
+          { type: "paper", title: "LLM.int8() — 8-bit Matrix Multiplication", meta: "Dettmers et al. · 2022", url: "https://arxiv.org/abs/2208.07339" },
+          { type: "paper", title: "GPTQ — Accurate Post-Training Quantization", meta: "Frantar et al. · 2022", url: "https://arxiv.org/abs/2210.17323" },
+          { type: "paper", title: "vLLM / PagedAttention — Efficient Memory Management for LLM Serving", meta: "Kwon et al. · 2023", url: "https://arxiv.org/abs/2309.06180" },
+          { type: "paper", title: "Speculative Decoding", meta: "Leviathan et al. · 2022", url: "https://arxiv.org/abs/2211.17192" }
+        ]
+      },
+      {
+        title: "Books on LLMs Specifically",
+        items: [
+          { type: "book", title: "Build a Large Language Model (From Scratch)", meta: "Sebastian Raschka · 2024 · build a GPT step by step", url: "https://www.manning.com/books/build-a-large-language-model-from-scratch" },
+          { type: "book", title: "Hands-On Large Language Models", meta: "Jay Alammar & Maarten Grootendorst · 2024" },
+          { type: "book", title: "Speech and Language Processing (3rd ed. draft)", meta: "Jurafsky & Martin · free PDF · latest chapters cover LLMs", url: "https://web.stanford.edu/~jurafsky/slp3/" }
+        ]
+      },
+      {
+        title: "Essential Blogs to Follow Continuously",
+        items: [
+          { type: "blog", title: "Lilian Weng's blog — read every post", meta: "OpenAI researcher · the best LLM survey writing on the internet", url: "https://lilianweng.github.io/" },
+          { type: "blog", title: "Ahead of AI — Sebastian Raschka's newsletter", meta: "monthly LLM research roundups", url: "https://magazine.sebastianraschka.com/" },
+          { type: "blog", title: "Interconnects — Nathan Lambert", meta: "post-training and RLHF deep dives", url: "https://www.interconnects.ai/" },
+          { type: "blog", title: "Karpathy's blog", meta: "rare but seminal posts", url: "https://karpathy.github.io/" },
+          { type: "blog", title: "Chip Huyen's blog", meta: "engineering perspective on LLM systems", url: "https://huyenchip.com/blog/" },
+          { type: "blog", title: "Simon Willison's weblog", meta: "practical, current, indispensable", url: "https://simonwillison.net/" }
+        ]
+      },
+      {
+        title: "Evaluation Benchmarks (read about each)",
+        items: [
+          { type: "paper", title: "MMLU — Measuring Massive Multitask Language Understanding", meta: "Hendrycks et al. · 2020", url: "https://arxiv.org/abs/2009.03300" },
+          { type: "paper", title: "HumanEval — Evaluating Large Language Models Trained on Code", meta: "Chen et al. · 2021", url: "https://arxiv.org/abs/2107.03374" },
+          { type: "paper", title: "GSM8K — Training Verifiers to Solve Math Word Problems", meta: "Cobbe et al. · 2021", url: "https://arxiv.org/abs/2110.14168" },
+          { type: "paper", title: "MATH — Measuring Mathematical Problem Solving", meta: "Hendrycks et al. · 2021", url: "https://arxiv.org/abs/2103.03874" },
+          { type: "paper", title: "Chatbot Arena — Open Platform for Evaluating LLMs by Human Preference", meta: "Zheng et al. · 2023", url: "https://arxiv.org/abs/2403.04132" },
+          { type: "paper", title: "GPQA — A Graduate-Level Google-Proof Q&A Benchmark", meta: "Rein et al. · 2023", url: "https://arxiv.org/abs/2311.12022" }
+        ],
+        checkpoint: "You can give a 1-hour lecture on the lifecycle of a frontier LLM — pretraining → SFT → preference optimization → tool use → deployment — citing specific papers for every design choice."
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: "Generative Models Beyond LLMs",
+    intro: "Diffusion, flow models, GANs, audio — the full generative landscape. Even if your focus is language, understanding diffusion is now non-optional.",
+    sections: [
+      {
+        title: "Diffusion Models",
+        items: [
+          { type: "paper", title: "Deep Unsupervised Learning using Nonequilibrium Thermodynamics", meta: "Sohl-Dickstein et al. · 2015 · the foundational paper", url: "https://arxiv.org/abs/1503.03585" },
+          { type: "paper", title: "DDPM — Denoising Diffusion Probabilistic Models", meta: "Ho, Jain, Abbeel · 2020", url: "https://arxiv.org/abs/2006.11239" },
+          { type: "paper", title: "Score-Based Generative Modeling through Stochastic Differential Equations", meta: "Song et al. · 2020", url: "https://arxiv.org/abs/2011.13456" },
+          { type: "paper", title: "Improved Denoising Diffusion Probabilistic Models", meta: "Nichol & Dhariwal · 2021", url: "https://arxiv.org/abs/2102.09672" },
+          { type: "paper", title: "Diffusion Models Beat GANs on Image Synthesis", meta: "Dhariwal & Nichol · 2021", url: "https://arxiv.org/abs/2105.05233" },
+          { type: "paper", title: "Classifier-Free Diffusion Guidance", meta: "Ho & Salimans · 2022", url: "https://arxiv.org/abs/2207.12598" },
+          { type: "paper", title: "Stable Diffusion / Latent Diffusion Models", meta: "Rombach et al. · 2022", url: "https://arxiv.org/abs/2112.10752" },
+          { type: "paper", title: "DiT — Scalable Diffusion Models with Transformers", meta: "Peebles & Xie · 2022", url: "https://arxiv.org/abs/2212.09748" },
+          { type: "paper", title: "Flow Matching for Generative Modeling", meta: "Lipman et al. · 2022", url: "https://arxiv.org/abs/2210.02747" }
+        ]
+      },
+      {
+        title: "GANs (still essential to understand)",
+        items: [
+          { type: "paper", title: "DCGAN", meta: "Radford et al. · 2015", url: "https://arxiv.org/abs/1511.06434" },
+          { type: "paper", title: "Wasserstein GAN", meta: "Arjovsky et al. · 2017", url: "https://arxiv.org/abs/1701.07875" },
+          { type: "paper", title: "Progressive Growing of GANs", meta: "Karras et al. · 2017", url: "https://arxiv.org/abs/1710.10196" },
+          { type: "paper", title: "StyleGAN — A Style-Based Generator Architecture for GANs", meta: "Karras et al. · 2018", url: "https://arxiv.org/abs/1812.04948" }
+        ]
+      },
+      {
+        title: "Flow & Normalizing Flow Models",
+        items: [
+          { type: "paper", title: "Real NVP — Density estimation using Real NVP", meta: "Dinh et al. · 2016", url: "https://arxiv.org/abs/1605.08803" },
+          { type: "paper", title: "Glow — Generative Flow with Invertible 1x1 Convolutions", meta: "Kingma & Dhariwal · 2018", url: "https://arxiv.org/abs/1807.03039" }
+        ]
+      },
+      {
+        title: "Audio Generation",
+        items: [
+          { type: "paper", title: "WaveNet — A Generative Model for Raw Audio", meta: "van den Oord et al. · 2016", url: "https://arxiv.org/abs/1609.03499" },
+          { type: "paper", title: "AudioLM — A Language Modeling Approach to Audio Generation", meta: "Borsos et al. · 2022", url: "https://arxiv.org/abs/2209.03143" },
+          { type: "paper", title: "EnCodec — High Fidelity Neural Audio Compression", meta: "Defossez et al. · 2022", url: "https://arxiv.org/abs/2210.13438" },
+          { type: "paper", title: "MusicGen — Simple and Controllable Music Generation", meta: "Copet et al. · 2023", url: "https://arxiv.org/abs/2306.05284" }
+        ],
+        checkpoint: "Implement a small DDPM on MNIST or CIFAR-10. Add classifier-free guidance. Explain the connection between diffusion and score-based models."
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: "Reinforcement Learning",
+    intro: "The third major paradigm. Increasingly fused with LLMs (RLHF, RLAIF, reasoning models) — understanding RL deeply is now essential for understanding the frontier.",
+    sections: [
+      {
+        title: "Canonical Text & Courses",
+        items: [
+          { type: "book", title: "Reinforcement Learning: An Introduction (2nd ed.)", meta: "Sutton & Barto · the definitive text · free PDF", url: "http://incompleteideas.net/book/the-book-2nd.html" },
+          { type: "course", title: "David Silver's RL Course (UCL · 10 lectures)", meta: "the best introduction in lecture form", url: "https://www.davidsilver.uk/teaching/" },
+          { type: "course", title: "UC Berkeley CS285 — Deep Reinforcement Learning", meta: "Sergey Levine · for the modern RL view", url: "https://rail.eecs.berkeley.edu/deeprlcourse/" },
+          { type: "course", title: "OpenAI Spinning Up in Deep RL", meta: "the best self-study tutorial", url: "https://spinningup.openai.com/" }
+        ]
+      },
+      {
+        title: "Classical RL Foundations",
+        items: [
+          { type: "paper", title: "Q-learning", meta: "Watkins & Dayan · 1992" },
+          { type: "paper", title: "REINFORCE / Policy Gradients", meta: "Williams · 1992" },
+          { type: "paper", title: "Policy Gradient Methods for Reinforcement Learning with Function Approximation", meta: "Sutton et al. · 1999" }
+        ]
+      },
+      {
+        title: "Deep RL — Value-Based",
+        items: [
+          { type: "paper", title: "Playing Atari with Deep Reinforcement Learning (DQN)", meta: "Mnih et al. · 2013", url: "https://arxiv.org/abs/1312.5602" },
+          { type: "paper", title: "Human-level control through deep reinforcement learning", meta: "Mnih et al. · 2015 · Nature", url: "https://www.nature.com/articles/nature14236" },
+          { type: "paper", title: "Deep Reinforcement Learning with Double Q-learning", meta: "van Hasselt et al. · 2015", url: "https://arxiv.org/abs/1509.06461" },
+          { type: "paper", title: "Rainbow: Combining Improvements in Deep RL", meta: "Hessel et al. · 2017", url: "https://arxiv.org/abs/1710.02298" }
+        ]
+      },
+      {
+        title: "Policy Gradient Methods",
+        items: [
+          { type: "paper", title: "Trust Region Policy Optimization (TRPO)", meta: "Schulman et al. · 2015", url: "https://arxiv.org/abs/1502.05477" },
+          { type: "paper", title: "Proximal Policy Optimization (PPO)", meta: "Schulman et al. · 2017 · the workhorse of modern RL", url: "https://arxiv.org/abs/1707.06347" },
+          { type: "paper", title: "Soft Actor-Critic (SAC)", meta: "Haarnoja et al. · 2018", url: "https://arxiv.org/abs/1801.01290" },
+          { type: "paper", title: "DDPG — Continuous Control with Deep RL", meta: "Lillicrap et al. · 2015", url: "https://arxiv.org/abs/1509.02971" }
+        ]
+      },
+      {
+        title: "Model-Based RL & Planning",
+        items: [
+          { type: "paper", title: "AlphaGo Zero — Mastering the game of Go without human knowledge", meta: "Silver et al. · 2017", url: "https://www.nature.com/articles/nature24270" },
+          { type: "paper", title: "MuZero — Mastering Atari, Go, chess and shogi by planning with a learned model", meta: "Schrittwieser et al. · 2019", url: "https://arxiv.org/abs/1911.08265" },
+          { type: "paper", title: "DreamerV3 — Mastering Diverse Domains through World Models", meta: "Hafner et al. · 2023", url: "https://arxiv.org/abs/2301.04104" }
+        ]
+      },
+      {
+        title: "RL Meets Foundation Models",
+        items: [
+          { type: "paper", title: "Gato — A Generalist Agent", meta: "Reed et al. · DeepMind · 2022", url: "https://arxiv.org/abs/2205.06175" },
+          { type: "paper", title: "PaLM-E — An Embodied Multimodal Language Model", meta: "Driess et al. · 2023", url: "https://arxiv.org/abs/2303.03378" },
+          { type: "paper", title: "RT-2 — Vision-Language-Action Models", meta: "Brohan et al. · 2023", url: "https://arxiv.org/abs/2307.15818" }
+        ],
+        checkpoint: "Solve CartPole with DQN from scratch. Then PPO on a Mujoco task. Explain TRPO → PPO motivation, and why PPO is the chosen algorithm for RLHF."
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: "Specialized Domains",
+    intro: "Computer vision, NLP, speech, robotics, recsys, time series, graphs. Pick 2–3 to go deep on based on your interest — even top researchers don't have equal depth across all of these.",
+    sections: [
+      {
+        title: "Computer Vision",
+        items: [
+          { type: "course", title: "Stanford CS231n (already in Stage 4)", meta: "the canonical CV-with-deep-learning course", url: "http://cs231n.stanford.edu/" },
+          { type: "book", title: "Computer Vision: Algorithms and Applications (2nd ed.)", meta: "Richard Szeliski · free PDF", url: "https://szeliski.org/Book/" },
+          { type: "paper", title: "Mask R-CNN", meta: "He et al. · 2017", url: "https://arxiv.org/abs/1703.06870" },
+          { type: "paper", title: "DETR — End-to-End Object Detection with Transformers", meta: "Carion et al. · 2020", url: "https://arxiv.org/abs/2005.12872" },
+          { type: "paper", title: "Segment Anything (SAM)", meta: "Kirillov et al. · 2023", url: "https://arxiv.org/abs/2304.02643" },
+          { type: "paper", title: "NeRF — Representing Scenes as Neural Radiance Fields", meta: "Mildenhall et al. · 2020", url: "https://arxiv.org/abs/2003.08934" },
+          { type: "paper", title: "3D Gaussian Splatting for Real-Time Radiance Field Rendering", meta: "Kerbl et al. · 2023", url: "https://arxiv.org/abs/2308.04079" },
+          { type: "paper", title: "DINOv2 — Learning Robust Visual Features without Supervision", meta: "Oquab et al. · 2023", url: "https://arxiv.org/abs/2304.07193" }
+        ]
+      },
+      {
+        title: "Natural Language Processing (the pre-LLM canon)",
+        items: [
+          { type: "course", title: "Stanford CS224n", meta: "see Stage 4", url: "https://web.stanford.edu/class/cs224n/" },
+          { type: "book", title: "Speech and Language Processing (Jurafsky & Martin)", meta: "free PDF", url: "https://web.stanford.edu/~jurafsky/slp3/" }
+        ]
+      },
+      {
+        title: "Speech Recognition & Synthesis",
+        items: [
+          { type: "paper", title: "Whisper — Robust Speech Recognition via Large-Scale Weak Supervision", meta: "Radford et al. · 2022 · OpenAI", url: "https://arxiv.org/abs/2212.04356" },
+          { type: "paper", title: "Wav2Vec 2.0 — A Framework for Self-Supervised Learning of Speech Representations", meta: "Baevski et al. · 2020", url: "https://arxiv.org/abs/2006.11477" }
+        ]
+      },
+      {
+        title: "Robotics & Embodied AI",
+        items: [
+          { type: "paper", title: "Diffusion Policy — Visuomotor Policy Learning via Action Diffusion", meta: "Chi et al. · 2023", url: "https://arxiv.org/abs/2303.04137" },
+          { type: "paper", title: "OpenVLA — An Open-Source Vision-Language-Action Model", meta: "Kim et al. · 2024", url: "https://arxiv.org/abs/2406.09246" }
+        ]
+      },
+      {
+        title: "Recommender Systems",
+        items: [
+          { type: "paper", title: "Wide & Deep Learning for Recommender Systems", meta: "Cheng et al. · 2016", url: "https://arxiv.org/abs/1606.07792" },
+          { type: "paper", title: "Deep Neural Networks for YouTube Recommendations", meta: "Covington et al. · 2016" }
+        ]
+      },
+      {
+        title: "Time Series & Forecasting",
+        items: [
+          { type: "paper", title: "DeepAR — Probabilistic Forecasting with Autoregressive Recurrent Networks", meta: "Salinas et al. · 2017", url: "https://arxiv.org/abs/1704.04110" },
+          { type: "paper", title: "Temporal Fusion Transformer", meta: "Lim et al. · 2019", url: "https://arxiv.org/abs/1912.09363" },
+          { type: "paper", title: "Chronos — Learning the Language of Time Series", meta: "Ansari et al. · 2024", url: "https://arxiv.org/abs/2403.07815" }
+        ]
+      },
+      {
+        title: "Graph Neural Networks",
+        items: [
+          { type: "book", title: "Graph Representation Learning", meta: "William Hamilton · free PDF", url: "https://www.cs.mcgill.ca/~wlh/grl_book/" },
+          { type: "paper", title: "Semi-Supervised Classification with Graph Convolutional Networks (GCN)", meta: "Kipf & Welling · 2016", url: "https://arxiv.org/abs/1609.02907" },
+          { type: "paper", title: "Graph Attention Networks (GAT)", meta: "Veličković et al. · 2017", url: "https://arxiv.org/abs/1710.10903" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 10,
+    title: "AI Safety, Alignment & Interpretability",
+    intro: "Increasingly inseparable from frontier AI. If you skip this, you don't understand where the field is going — or why.",
+    sections: [
+      {
+        title: "Foundational Reading",
+        items: [
+          { type: "book", title: "Human Compatible", meta: "Stuart Russell · 2019" },
+          { type: "book", title: "Superintelligence", meta: "Nick Bostrom · 2014" },
+          { type: "book", title: "The Alignment Problem", meta: "Brian Christian · 2020 · the best general intro" },
+          { type: "paper", title: "Concrete Problems in AI Safety", meta: "Amodei et al. · 2016", url: "https://arxiv.org/abs/1606.06565" },
+          { type: "paper", title: "Unsolved Problems in ML Safety", meta: "Hendrycks et al. · 2021", url: "https://arxiv.org/abs/2109.13916" }
+        ]
+      },
+      {
+        title: "Alignment Research",
+        items: [
+          { type: "paper", title: "A General Language Assistant as a Laboratory for Alignment", meta: "Askell et al. · Anthropic · 2021", url: "https://arxiv.org/abs/2112.00861" },
+          { type: "paper", title: "Risks from Learned Optimization in Advanced ML Systems", meta: "Hubinger et al. · 2019", url: "https://arxiv.org/abs/1906.01820" },
+          { type: "paper", title: "The Alignment Problem from a Deep Learning Perspective", meta: "Ngo, Chan, Mindermann · 2022", url: "https://arxiv.org/abs/2209.00626" },
+          { type: "paper", title: "Red-teaming Language Models with Language Models", meta: "Perez et al. · 2022", url: "https://arxiv.org/abs/2202.03286" },
+          { type: "paper", title: "Sleeper Agents — Training Deceptive LLMs that Persist Through Safety Training", meta: "Hubinger et al. · Anthropic · 2024", url: "https://arxiv.org/abs/2401.05566" }
+        ]
+      },
+      {
+        title: "Mechanistic Interpretability",
+        items: [
+          { type: "blog", title: "Distill — Zoom In: An Introduction to Circuits", meta: "Olah et al. · the foundational interp essay", url: "https://distill.pub/2020/circuits/zoom-in/" },
+          { type: "paper", title: "A Mathematical Framework for Transformer Circuits", meta: "Elhage et al. · Anthropic · 2021", url: "https://transformer-circuits.pub/2021/framework/index.html" },
+          { type: "paper", title: "Toy Models of Superposition", meta: "Elhage et al. · 2022", url: "https://transformer-circuits.pub/2022/toy_model/index.html" },
+          { type: "paper", title: "Towards Monosemanticity: Decomposing Language Models with Dictionary Learning", meta: "Bricken et al. · Anthropic · 2023", url: "https://transformer-circuits.pub/2023/monosemantic-features/index.html" },
+          { type: "paper", title: "Scaling Monosemanticity", meta: "Templeton et al. · Anthropic · 2024", url: "https://transformer-circuits.pub/2024/scaling-monosemanticity/index.html" },
+          { type: "paper", title: "Locating and Editing Factual Associations in GPT (ROME)", meta: "Meng et al. · 2022", url: "https://arxiv.org/abs/2202.05262" },
+          { type: "course", title: "ARENA curriculum — Mechanistic Interpretability track", meta: "Neel Nanda's recommended bootcamp", url: "https://www.arena.education/" }
+        ]
+      },
+      {
+        title: "Key Blogs & Communities",
+        items: [
+          { type: "blog", title: "Anthropic research blog", meta: "research.anthropic.com", url: "https://www.anthropic.com/research" },
+          { type: "blog", title: "Alignment Forum", meta: "the technical alignment community hub", url: "https://www.alignmentforum.org/" },
+          { type: "blog", title: "AI Safety Fundamentals — courses by BlueDot Impact", meta: "structured intro programs", url: "https://aisafetyfundamentals.com/" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 11,
+    title: "AI Ethics, Policy & Governance",
+    intro: "The societal layer. Increasingly important — and increasingly inseparable from technical work as deployment scales.",
+    sections: [
+      {
+        title: "Ethics & Critique",
+        items: [
+          { type: "book", title: "Weapons of Math Destruction", meta: "Cathy O'Neil · 2016" },
+          { type: "book", title: "Algorithms of Oppression", meta: "Safiya Noble · 2018" },
+          { type: "book", title: "Race After Technology", meta: "Ruha Benjamin · 2019" },
+          { type: "book", title: "Automating Inequality", meta: "Virginia Eubanks · 2018" },
+          { type: "book", title: "Atlas of AI", meta: "Kate Crawford · 2021 · the material substrate of AI" },
+          { type: "paper", title: "On the Dangers of Stochastic Parrots", meta: "Bender, Gebru, McMillan-Major, Shmitchell · 2021", url: "https://dl.acm.org/doi/10.1145/3442188.3445922" },
+          { type: "paper", title: "Gender Shades — Intersectional Accuracy Disparities in Commercial Gender Classification", meta: "Buolamwini & Gebru · 2018", url: "https://proceedings.mlr.press/v81/buolamwini18a.html" }
+        ]
+      },
+      {
+        title: "Fairness, Privacy, Security",
+        items: [
+          { type: "book", title: "Fairness and Machine Learning", meta: "Barocas, Hardt, Narayanan · free online", url: "https://fairmlbook.org/" },
+          { type: "paper", title: "Extracting Training Data from Large Language Models", meta: "Carlini et al. · 2020", url: "https://arxiv.org/abs/2012.07805" }
+        ]
+      },
+      {
+        title: "Policy & Governance",
+        items: [
+          { type: "blog", title: "EU AI Act — official summary", meta: "the most consequential AI regulation to date", url: "https://artificialintelligenceact.eu/" },
+          { type: "blog", title: "UK AI Safety Institute reports", meta: "current frontier-model evaluations", url: "https://www.aisi.gov.uk/" },
+          { type: "paper", title: "Frontier AI Regulation: Managing Emerging Risks to Public Safety", meta: "Anderljung et al. · 2023", url: "https://arxiv.org/abs/2307.03718" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 12,
+    title: "The Frontier — Continually Updating",
+    intro: "The frontier moves monthly. Below are categories — fill in current papers as they appear. Following the sources below will keep you current indefinitely.",
+    sections: [
+      {
+        title: "Reasoning Models",
+        items: [
+          { type: "blog", title: "OpenAI o1 / o3 — system cards and release posts", url: "https://openai.com/research" },
+          { type: "paper", title: "DeepSeek-R1 (already linked in Stage 6)", meta: "the first major open reasoning model" },
+          { type: "paper", title: "Let's Verify Step by Step (process reward models)", meta: "Lightman et al. · 2023", url: "https://arxiv.org/abs/2305.20050" }
+        ]
+      },
+      {
+        title: "Long Context & State Space Models",
+        items: [
+          { type: "paper", title: "Mamba — Linear-Time Sequence Modeling with Selective State Spaces", meta: "Gu & Dao · 2023", url: "https://arxiv.org/abs/2312.00752" },
+          { type: "paper", title: "Ring Attention with Blockwise Transformers for Near-Infinite Context", meta: "Liu et al. · 2023", url: "https://arxiv.org/abs/2310.01889" },
+          { type: "paper", title: "Lost in the Middle: How Language Models Use Long Contexts", meta: "Liu et al. · 2023", url: "https://arxiv.org/abs/2307.03172" }
+        ]
+      },
+      {
+        title: "Agents",
+        items: [
+          { type: "paper", title: "SWE-bench — Can Language Models Resolve Real-World GitHub Issues?", meta: "Jimenez et al. · 2023", url: "https://arxiv.org/abs/2310.06770" },
+          { type: "paper", title: "Voyager — An Open-Ended Embodied Agent with LLMs", meta: "Wang et al. · 2023", url: "https://arxiv.org/abs/2305.16291" },
+          { type: "blog", title: "Anthropic's Model Context Protocol (MCP)", meta: "the emerging standard for agent tooling", url: "https://www.anthropic.com/news/model-context-protocol" }
+        ]
+      },
+      {
+        title: "Multimodal & Video Frontier",
+        items: [
+          { type: "blog", title: "Sora technical report — video generation models as world simulators", meta: "OpenAI", url: "https://openai.com/index/video-generation-models-as-world-simulators/" },
+          { type: "blog", title: "Gemini multimodal capabilities", meta: "Google DeepMind" }
+        ]
+      },
+      {
+        title: "Synthetic Data & Self-Improvement",
+        items: [
+          { type: "paper", title: "Textbooks Are All You Need (Phi-1)", meta: "Gunasekar et al. · 2023", url: "https://arxiv.org/abs/2306.11644" },
+          { type: "paper", title: "Self-Rewarding Language Models", meta: "Yuan et al. · 2024", url: "https://arxiv.org/abs/2401.10020" },
+          { type: "paper", title: "STaR — Self-Taught Reasoner", meta: "Zelikman et al. · 2022", url: "https://arxiv.org/abs/2203.14465" }
+        ]
+      },
+      {
+        title: "Where to Track the Frontier",
+        items: [
+          { type: "blog", title: "arXiv cs.LG, cs.CL, cs.AI — daily listings", url: "https://arxiv.org/list/cs.LG/recent" },
+          { type: "blog", title: "Hugging Face Daily Papers", url: "https://huggingface.co/papers" },
+          { type: "blog", title: "Papers with Code — trending", url: "https://paperswithcode.com/" },
+          { type: "blog", title: "Import AI newsletter — Jack Clark", url: "https://importai.substack.com/" },
+          { type: "blog", title: "The Batch — Andrew Ng", url: "https://www.deeplearning.ai/the-batch/" },
+          { type: "blog", title: "Last Week in AI", url: "https://lastweekin.ai/" },
+          { type: "blog", title: "Anthropic, OpenAI, DeepMind, Meta AI research blogs", meta: "follow all four directly" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 13,
+    title: "Adjacent & Foundational Fields",
+    intro: "Understanding these gives you context most ML engineers lack — and the ability to make connections most cannot see.",
+    sections: [
+      {
+        title: "Cognitive Science & Neuroscience",
+        items: [
+          { type: "book", title: "Thinking, Fast and Slow", meta: "Daniel Kahneman · 2011" },
+          { type: "book", title: "How We Learn", meta: "Stanislas Dehaene · 2020" },
+          { type: "book", title: "Vision", meta: "David Marr · 1982 · the three levels of analysis" },
+          { type: "book", title: "The Free Energy Principle (Friston) — start with survey papers", meta: "" }
+        ]
+      },
+      {
+        title: "Theory of Computation & Complexity",
+        items: [
+          { type: "book", title: "Introduction to the Theory of Computation", meta: "Michael Sipser" },
+          { type: "book", title: "Computational Complexity: A Modern Approach", meta: "Arora & Barak · selected chapters", url: "https://theory.cs.princeton.edu/complexity/" }
+        ]
+      },
+      {
+        title: "Causal Inference",
+        items: [
+          { type: "book", title: "Causality", meta: "Judea Pearl · 2009" },
+          { type: "book", title: "Causal Inference in Statistics: A Primer", meta: "Pearl, Glymour, Jewell" },
+          { type: "book", title: "The Book of Why", meta: "Pearl & Mackenzie · popular intro" }
+        ]
+      },
+      {
+        title: "Philosophy of Mind",
+        items: [
+          { type: "book", title: "Mind as Machine", meta: "Margaret Boden · the heavyweight history" },
+          { type: "book", title: "Reality+", meta: "David Chalmers · 2022" },
+          { type: "book", title: "Artificial Intelligence: A Guide for Thinking Humans", meta: "Melanie Mitchell · 2019 · the best skeptic's primer" }
+        ]
+      },
+      {
+        title: "Systems & Hardware",
+        items: [
+          { type: "book", title: "Computer Architecture: A Quantitative Approach", meta: "Hennessy & Patterson" },
+          { type: "blog", title: "Making Deep Learning Go Brrrr From First Principles", meta: "Horace He · essential GPU intuition", url: "https://horace.io/brrr_intro.html" },
+          { type: "paper", title: "ZeRO — Memory Optimizations Toward Training Trillion Parameter Models", meta: "Rajbhandari et al. · 2019", url: "https://arxiv.org/abs/1910.02054" }
+        ]
+      }
+    ]
+  },
+  {
+    id: 14,
+    title: "Synthesis & Mastery Practices",
+    intro: "Knowledge is fragile without practice. These are the meta-skills that turn a well-read learner into someone people consult.",
+    sections: [
+      {
+        title: "Build Things",
+        items: [
+          { type: "project", title: "Reimplement 5+ landmark papers from scratch", meta: "suggestions: AlexNet, Transformer, GPT-2 small, DDPM, PPO" },
+          { type: "project", title: "Contribute a non-trivial PR to an open-source ML library", meta: "PyTorch, Hugging Face Transformers, vLLM, llama.cpp, etc." },
+          { type: "project", title: "Train at least one model end-to-end on real compute", meta: "rent GPUs if needed — Lambda, Vast.ai, RunPod" },
+          { type: "project", title: "Build and deploy at least one production-grade ML system", meta: "from data pipeline → model → serving → monitoring" }
+        ]
+      },
+      {
+        title: "Teach to Learn",
+        items: [
+          { type: "project", title: "Write a public blog post for each major stage in your own words", meta: "if you can't explain it, you don't know it" },
+          { type: "project", title: "Give a recorded talk on a topic from each major stage", meta: "even just to yourself on camera" },
+          { type: "project", title: "Answer hard questions publicly", meta: "/r/MachineLearning, Stack Overflow, X" }
+        ]
+      },
+      {
+        title: "Read Adversarially",
+        items: [
+          { type: "book", title: "Critique 1: Gary Marcus — Rebooting AI / Garbage In, Garbage Out essays", meta: "the symbolic critique" },
+          { type: "paper", title: "Critique 2: On the Measure of Intelligence", meta: "François Chollet · 2019", url: "https://arxiv.org/abs/1911.01547" },
+          { type: "book", title: "Critique 3: Judea Pearl — The Book of Why", meta: "the causality critique" },
+          { type: "project", title: "Steelman every position in field debates", meta: "if you can't argue both sides, you only know one" }
+        ]
+      },
+      {
+        title: "Build a Personal Knowledge System",
+        items: [
+          { type: "project", title: "Maintain notes for every paper you read", meta: "Obsidian, Notion, or similar" },
+          { type: "project", title: "Build a concept map connecting techniques across stages", meta: "the map is where understanding becomes synthesis" },
+          { type: "project", title: "Keep a quarterly 'open questions' log", meta: "what you don't yet know — and what would close each gap" }
+        ]
+      }
+    ],
+    isFinal: true
+  }
+];
+
+// =============================================================================
+// RENDER & INTERACTIVITY
+// =============================================================================
+
+const STORAGE_KEY = 'ai-atlas-progress-v1';
+const THEME_KEY = 'ai-atlas-theme';
+
+let progress = {};
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) progress = JSON.parse(saved);
+} catch (e) { progress = {}; }
+
+// Apply saved theme
+const savedTheme = localStorage.getItem(THEME_KEY);
+if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+function saveProgress() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+}
+
+function itemId(stageId, sectionIdx, itemIdx) {
+  return `s${stageId}.${sectionIdx}.${itemIdx}`;
+}
+
+function getItemState(id) {
+  return progress[id] || 'none'; // 'none' | 'done' | 'star'
+}
+
+function setItemState(id, state) {
+  if (state === 'none') delete progress[id];
+  else progress[id] = state;
+  saveProgress();
+  updateAllProgress();
+}
+
+function countItems(stage) {
+  let total = 0;
+  stage.sections.forEach(s => total += s.items.length);
+  return total;
+}
+
+function countDone(stage) {
+  let done = 0;
+  stage.sections.forEach((s, si) => {
+    s.items.forEach((it, ii) => {
+      const st = getItemState(itemId(stage.id, si, ii));
+      if (st === 'done' || st === 'star') done++;
+    });
+  });
+  return done;
+}
+
+function totalItems() { return STAGES.reduce((a, s) => a + countItems(s), 0); }
+function totalDone() { return STAGES.reduce((a, s) => a + countDone(s), 0); }
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function renderItem(stageId, sectionIdx, itemIdx, item) {
+  const id = itemId(stageId, sectionIdx, itemIdx);
+  const state = getItemState(id);
+  const cls = state === 'done' || state === 'star' ? 'done' : '';
+  const checkCls = state === 'star' ? 'check starred' : (state === 'done' ? 'check checked' : 'check');
+  const link = item.url ? `<a href="${item.url}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>` : escapeHtml(item.title);
+  const meta = item.meta ? `<div class="item-meta">${escapeHtml(item.meta)}</div>` : '';
+  const linkBtn = item.url
+    ? `<a href="${item.url}" target="_blank" rel="noopener" class="icon-btn" title="Open resource">↗</a>`
+    : '';
+  return `
+    <div class="item ${cls}" data-id="${id}">
+      <div class="${checkCls}" data-id="${id}" title="Click: done · Double-click: mastered"></div>
+      <div class="badge badge-${item.type}">${item.type}</div>
+      <div class="item-body">
+        <div class="item-title">${link}</div>
+        ${meta}
+      </div>
+      <div class="item-actions">${linkBtn}</div>
+    </div>
+  `;
+}
+
+function renderSection(stage, section, sectionIdx) {
+  const items = section.items.map((it, ii) => renderItem(stage.id, sectionIdx, ii, it)).join('');
+  const checkpoint = section.checkpoint
+    ? `<div class="checkpoint-block"><div class="label">Checkpoint</div><div class="text">${escapeHtml(section.checkpoint)}</div></div>`
+    : '';
+  const embed = section.embedVideo
+    ? `<div class="video-embed"><iframe src="https://www.youtube.com/embed/${section.embedVideo.id}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe></div>
+       <div class="video-caption">${escapeHtml(section.embedVideo.caption || '')}</div>`
+    : '';
+  return `
+    <div class="section">
+      <div class="section-title">
+        <span class="section-num">§ ${stage.id}.${sectionIdx + 1}</span>
+        <h3>${escapeHtml(section.title)}</h3>
+      </div>
+      ${embed}
+      <div class="items">${items}</div>
+      ${checkpoint}
+    </div>
+  `;
+}
+
+function renderStage(stage) {
+  const sections = stage.sections.map((s, i) => renderSection(stage, s, i)).join('');
+  const total = countItems(stage);
+  const done = countDone(stage);
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  const finalBlock = stage.isFinal ? `
+    <div class="final-section">
+      <h3>The Mastery Test</h3>
+      <p style="color: var(--ink-soft); margin-bottom: 1rem;">If you can do all of the following without notes, you have achieved what this guide aims for:</p>
+      <ol style="padding-left: 1.5rem; color: var(--ink-soft); line-height: 1.9;">
+        <li>Narrate the history of AI from Turing to today in 90 minutes — with key people, papers, and turning points.</li>
+        <li>Derive backpropagation for an arbitrary feedforward network on a whiteboard.</li>
+        <li>Implement a Transformer, a CNN, a DDPM, and PPO from scratch in PyTorch.</li>
+        <li>Explain the modern LLM stack — pretraining, scaling laws, RLHF/DPO, inference optimization — citing specific papers.</li>
+        <li>Critique any current frontier paper for methodology, missing ablations, and reproducibility.</li>
+        <li>Compare paradigms — symbolic AI, classical ML, deep learning, RL, foundation models — and articulate when each applies.</li>
+        <li>Discuss safety, alignment, ethics, and governance without strawmanning any major position.</li>
+        <li>Identify your own gaps — areas where you know you don't know, with specific resources you'd consult.</li>
+      </ol>
+      <p style="margin-top: 1.5rem; font-style: italic; color: var(--ink);">You won't be "first." Nobody is. But if you can do these things, you will be one of the very few people who can hold the entire field in their head at once — and that is a real, rare, and useful kind of mastery.</p>
+    </div>
+  ` : '';
+
+  return `
+    <div class="stage-content" id="stage-${stage.id}" data-stage="${stage.id}">
+      <div class="stage-header">
+        <div class="stage-marker">Stage ${String(stage.id).padStart(2, '0')} of 14</div>
+        <h2 class="stage-title">${escapeHtml(stage.title)}</h2>
+        <p class="stage-intro">${escapeHtml(stage.intro)}</p>
+        <div class="stage-progress">
+          <div class="stage-progress-bar"><div class="stage-progress-fill" style="width: ${pct}%"></div></div>
+          <div class="stage-progress-text">${done} / ${total} complete · ${pct}%</div>
+        </div>
+      </div>
+      ${sections}
+      ${finalBlock}
+    </div>
+  `;
+}
+
+function renderSidebar() {
+  const html = STAGES.map(stage => {
+    const total = countItems(stage);
+    const done = countDone(stage);
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    return `
+      <a class="stage-nav-item" data-stage="${stage.id}" href="#stage-${stage.id}">
+        <span class="stage-num">${String(stage.id).padStart(2, '0')}</span>
+        <span class="stage-name">${escapeHtml(stage.title)}</span>
+        <span class="stage-pct ${pct === 100 ? 'complete' : ''}">${pct}%</span>
+      </a>
+    `;
+  }).join('');
+  document.getElementById('stageNav').innerHTML = html;
+}
+
+function renderStages() {
+  document.getElementById('stageContainer').innerHTML = STAGES.map(renderStage).join('');
+}
+
+function updateAllProgress() {
+  // Sidebar
+  STAGES.forEach(stage => {
+    const navItem = document.querySelector(`.stage-nav-item[data-stage="${stage.id}"] .stage-pct`);
+    if (navItem) {
+      const total = countItems(stage);
+      const done = countDone(stage);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      navItem.textContent = `${pct}%`;
+      navItem.className = `stage-pct ${pct === 100 ? 'complete' : ''}`;
+    }
+    // Stage header progress
+    const stageContent = document.getElementById(`stage-${stage.id}`);
+    if (stageContent) {
+      const fill = stageContent.querySelector('.stage-progress-fill');
+      const text = stageContent.querySelector('.stage-progress-text');
+      const total = countItems(stage);
+      const done = countDone(stage);
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      if (fill) fill.style.width = pct + '%';
+      if (text) text.textContent = `${done} / ${total} complete · ${pct}%`;
+    }
+  });
+  // Overall
+  const total = totalItems();
+  const done = totalDone();
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('overallFill').style.width = pct + '%';
+  document.getElementById('totalDone').textContent = done;
+  document.getElementById('totalAll').textContent = total;
+}
+
+function setActiveNav(stageId) {
+  document.querySelectorAll('.stage-nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.stage == stageId);
+  });
+}
+
+// Initial render
+renderSidebar();
+renderStages();
+updateAllProgress();
+
+// Click & double-click handling on checkboxes
+let clickTimer = null;
+document.addEventListener('click', (e) => {
+  const check = e.target.closest('.check');
+  if (!check) return;
+  e.preventDefault();
+  const id = check.dataset.id;
+  if (clickTimer) {
+    // It's a double-click
+    clearTimeout(clickTimer); clickTimer = null;
+    const state = getItemState(id);
+    setItemState(id, state === 'star' ? 'none' : 'star');
+    refreshItem(id);
+  } else {
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+      const state = getItemState(id);
+      // Single click cycles: none → done → none (star is double-click only)
+      setItemState(id, state === 'done' ? 'none' : 'done');
+      refreshItem(id);
+    }, 220);
+  }
+});
+
+function refreshItem(id) {
+  const state = getItemState(id);
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(el => {
+    if (el.classList.contains('check')) {
+      el.className = 'check' + (state === 'star' ? ' starred' : (state === 'done' ? ' checked' : ''));
+    } else if (el.classList.contains('item')) {
+      el.classList.toggle('done', state === 'done' || state === 'star');
+    }
+  });
+}
+
+// Sidebar nav active state via scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.dataset.stage;
+      setActiveNav(id);
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+document.querySelectorAll('.stage-content').forEach(el => {
+  el.classList.add('active'); // show all
+  observer.observe(el);
+});
+
+// Theme toggle
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  if (next === 'light') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', 'dark');
+  localStorage.setItem(THEME_KEY, next);
+});
+
+// Export progress
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const data = { exportedAt: new Date().toISOString(), progress };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ai-atlas-progress-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// Import progress
+document.getElementById('importBtn').addEventListener('click', () => {
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.progress && typeof data.progress === 'object') {
+        if (confirm('Replace current progress with imported data?')) {
+          progress = data.progress;
+          saveProgress();
+          // Re-render all items
+          document.querySelectorAll('.item').forEach(item => {
+            refreshItem(item.dataset.id);
+          });
+          updateAllProgress();
+        }
+      } else {
+        alert('Invalid progress file.');
+      }
+    } catch (err) {
+      alert('Could not parse the file.');
+    }
+  };
+  reader.readAsText(file);
+});
+
+// Reset
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    progress = {};
+    saveProgress();
+    document.querySelectorAll('.item').forEach(item => refreshItem(item.dataset.id));
+    updateAllProgress();
+  }
+});
+</script>
+
+</body>
+</html>
