@@ -1,0 +1,8 @@
+{
+  "name": "atlas-reader-build",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "katex": "0.16.47"
+  }
+}

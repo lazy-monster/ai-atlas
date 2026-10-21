@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f5efe4">
+<title>Atlas Reader</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600&display=swap">
+<link rel="preload" href="katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="katex/katex.min.css">
+<link rel="stylesheet" href="app.css">
+<script>
+  try {
+    var s = JSON.parse(localStorage.getItem('ar.settings') || '{}');
+    var t = s.theme || 'auto';
+    if (t === 'auto') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'sepia';
+    document.documentElement.dataset.theme = t;
+  } catch (e) {
+    document.documentElement.dataset.theme = 'sepia';
+  }
+</script>
+</head>
+<body>
+<header class="bar" id="bar">
+  <div class="bar-side bar-left"></div>
+  <div class="bar-title"></div>
+  <div class="bar-side bar-right"></div>
+  <div class="bar-progress"><i></i></div>
+</header>
+<main id="view"></main>
+<button id="chip" type="button" hidden>Look up</button>
+<div id="scrim" hidden></div>
+<aside id="sheet" role="dialog" aria-modal="true" hidden></aside>
+<script type="module" src="app.js"></script>
+</body>
+</html>
